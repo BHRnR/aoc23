@@ -8,6 +8,7 @@ fun first(): Int =
         .sumOf { line -> line.toInt() }
 
 fun replaceWrittenWithChar(entry: String): String =
+//    first and last char have to be kept to make sure adjacent numbers are recognized
     entry.replace("one", "o1e")
         .replace("two", "t2o")
         .replace("three", "t3e")
