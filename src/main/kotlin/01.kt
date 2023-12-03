@@ -1,13 +1,19 @@
 import java.io.File
 
-fun first(): Int =
+fun firstA(): Int =
     File("src/main/resources/input1").readLines()
-//        .map { entry -> replaceWrittenWithChar(entry) } //uncoment for second part
         .map { entry -> getDigits(entry) }
         .map { entry -> combineDigits(entry) }
         .sumOf { line -> line.toInt() }
 
-fun replaceWrittenWithChar(entry: String): String =
+fun firstB(): Int =
+    File("src/main/resources/input1").readLines()
+        .map { entry -> replaceWrittenWithChar(entry) } //uncomment for second part
+        .map { entry -> getDigits(entry) }
+        .map { entry -> combineDigits(entry) }
+        .sumOf { line -> line.toInt() }
+
+private fun replaceWrittenWithChar(entry: String): String =
 //    first and last char have to be kept to make sure adjacent numbers are recognized
     entry.replace("one", "o1e")
         .replace("two", "t2o")
@@ -19,8 +25,8 @@ fun replaceWrittenWithChar(entry: String): String =
         .replace("eight", "e8t")
         .replace("nine", "n9e")
 
-fun getDigits(entry: String): String =
+private fun getDigits(entry: String): String =
     entry.filter { char -> char.isDigit() }
 
-fun combineDigits(entry: String): String =
+private fun combineDigits(entry: String): String =
     entry.first().toString() + entry.last()

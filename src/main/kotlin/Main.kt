@@ -1,3 +1,3 @@
 fun main() {
-    println("Solution for first day: ${first()}")
+    println(secondB())
 }
