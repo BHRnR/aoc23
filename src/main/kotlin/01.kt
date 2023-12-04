@@ -8,7 +8,7 @@ fun firstA(): Int =
 
 fun firstB(): Int =
     File("src/main/resources/input1").readLines()
-        .map { entry -> replaceWrittenWithChar(entry) } //uncomment for second part
+        .map { entry -> replaceWrittenWithChar(entry) }
         .map { entry -> getDigits(entry) }
         .map { entry -> combineDigits(entry) }
         .sumOf { line -> line.toInt() }

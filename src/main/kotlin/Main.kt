@@ -1,3 +1,3 @@
 fun main() {
-    println(fourthA())
+    println(fourthB())
 }

@@ -5,11 +5,25 @@ import kotlin.math.pow
 fun fourthA(): Int =
     File("src/main/resources/input4").readLines()
         .map { parseCard(it) }
-        .sumOf { getPointsPerCard(it) }
+        .sumOf { 2.0.pow(it.matches - 1).toInt() }
+
+fun fourthB(): Int {
+    val cards = File("src/main/resources/input4").readLines().map { parseCard(it) }
+    for (card in cards) {
+        card.copies++
+        for (upcoming in card.id..<card.id + card.matches)
+            cards[upcoming].copies += card.copies
+    }
+    return cards.sumOf { it.copies }
+}
 
 private fun parseCard(entry: String): Card {
-    val numbers = entry.split(": ")[1].split(" | ")
-    return Card(parseList(numbers[0]), parseList(numbers[1]))
+    val splitInput = entry.split(":")
+    val id = splitInput[0].split(" ").last.toInt()
+    val numbers = splitInput[1].split(" | ")
+    val winningNumbers = parseList(numbers[0])
+    val ownNumbers = parseList(numbers[1])
+    return Card(id, winningNumbers, ownNumbers, getMatches(winningNumbers, ownNumbers))
 }
 
 private fun parseList(list: String): Set<Int> =
@@ -18,7 +32,5 @@ private fun parseList(list: String): Set<Int> =
         .map { it.toInt() }
         .toSet()
 
-private fun getPointsPerCard(card: Card): Int {
-    val matches = card.ownNumbers.intersect(card.winningNumbers).size
-    return 2.0.pow(matches - 1).toInt()
-}
+private fun getMatches(winningNumbers: Set<Int>, ownNumbers: Set<Int>): Int =
+    (winningNumbers.intersect(ownNumbers).size)
