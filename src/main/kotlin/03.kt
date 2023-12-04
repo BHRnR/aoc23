@@ -21,7 +21,7 @@ fun thirdA(): Int {
     return sum
 }
 
-fun hasSymbolNeighbour(data: List<String>, row: Int, column: Int, length: Int): Boolean {
+private  fun hasSymbolNeighbour(data: List<String>, row: Int, column: Int, length: Int): Boolean {
     for (r in row - 1..row + 1)
         for (c in column - 1 - length..column)
             try {
@@ -31,5 +31,5 @@ fun hasSymbolNeighbour(data: List<String>, row: Int, column: Int, length: Int): 
     return false
 }
 
-fun isSymbol(char: Char): Boolean = char != '.' && !char.isDigit()
+private fun isSymbol(char: Char): Boolean = char != '.' && !char.isDigit()
 
