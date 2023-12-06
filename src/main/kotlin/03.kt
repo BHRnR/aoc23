@@ -20,16 +20,16 @@ fun thirdA(): Int {
 }
 
 fun thirdB(): Int {
-    //TODO: Not finished yet
     val inputLines = getData()
     var sum = 0
-    for (row in inputLines.indices) {
-        for (column in inputLines[0].indices) {
-            if (inputLines[row][column] == '*')
-                println(getNeighbouringNumbers(inputLines, row, column))
-        }
-    }
-    return 0
+    for (row in inputLines.indices)
+        for (column in inputLines[0].indices)
+            if (inputLines[row][column] == '*') {
+                val neighbours = getNeighbouringNumbers(inputLines, row, column)
+                if (neighbours.size == 2)
+                    sum += neighbours[0] * neighbours[1]
+            }
+    return sum
 }
 
 private fun getData(): List<String> {
@@ -51,10 +51,49 @@ private fun hasSymbolNeighbour(data: List<String>, row: Int, column: Int, length
 private fun isSymbol(char: Char): Boolean = char != '.' && !char.isDigit()
 
 private fun getNeighbouringNumbers(data: List<String>, row: Int, column: Int): List<Int> {
+    return getHorizontalNumbers(data, row, column) + getVerticalNumbers(data, row, column)
+}
+
+private fun getVerticalNumbers(data: List<String>, row: Int, column: Int): List<Int> {
+    val result = mutableListOf<Int>()
+    for (currentRow in arrayOf(row - 1, row + 1)) {
+        val digitsToCheck = (-1..1).map { data[currentRow][column + it] }.toList()
+        var numberLeft = ""
+        var numberRight = ""
+
+        if (digitsToCheck[0].isDigit())
+            numberLeft = getNumber(data, currentRow, column, -1)
+        if (digitsToCheck[2].isDigit())
+            numberRight = getNumber(data, currentRow, column, 1)
+
+        if (digitsToCheck[1].isDigit()) {
+            result.add((numberLeft + digitsToCheck[1] + numberRight).toInt())
+        } else {
+            if (numberLeft != "")
+                result.add(numberLeft.toInt())
+            if (numberRight != "")
+                result.add(numberRight.toInt())
+        }
+    }
+    return result
+}
+
+private fun getHorizontalNumbers(data: List<String>, row: Int, column: Int): List<Int> {
     val numbers = mutableListOf<Int>()
-    for (r in row - 1..row + 1)
-        for (c in column - 1..column + 1)
-            if (data[r][c].isDigit())
-                numbers.add(data[r][c].code)
+    for (orientation in intArrayOf(1, -1))
+        if (data[row][column + orientation].isDigit())
+            numbers.add(getNumber(data, row, column, orientation).toInt())
     return numbers
+}
+
+private fun getNumber(data: List<String>, row: Int, column: Int, direction: Int): String {
+    var number = ""
+    var i = 1
+
+    while (data[row][column + i * direction].isDigit()) {
+        number += data[row][column + i * direction]
+        i++
+    }
+
+    return if (direction == 1) number else number.reversed()
 }
