@@ -1,3 +1,3 @@
 fun main() {
-    println(thirdB())
+    println(fifth())
 }

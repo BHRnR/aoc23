@@ -11,7 +11,7 @@ fun fourthB(): Int {
     val cards = File("src/main/resources/input4").readLines().map { parseCard(it) }
     for (card in cards) {
         card.copies++
-        for (upcoming in card.id..<card.id + card.matches)
+        for (upcoming in card.id until card.id + card.matches)
             cards[upcoming].copies += card.copies
     }
     return cards.sumOf { it.copies }

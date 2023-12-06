@@ -5,61 +5,49 @@ import java.io.File
 fun fifth(): Long {
     val input = parseInput()
     var minLocation = input.humidityLocationMap.maxOf { it.destinationStart }
+    var currentSeed = 0
     val seeds = input.seeds
 
-//////////////////////////////////////////
-//     Part 1
-//    for (seed in seeds) {
-//        val soil = mapValue(seed, input.seedSoilMap)
-//        val fertilizer = mapValue(soil, input.soilFertilizerMap)
-//        val water = mapValue(fertilizer, input.fertilizerWaterMap)
-//        val light = mapValue(water, input.waterLightMap)
-//        val temperature = mapValue(light, input.lightTemperatureMap)
-//        val humidity = mapValue(temperature, input.temperatureHumidityMap)
-//        val location = mapValue(humidity, input.humidityLocationMap)
-//
-//        if (location < minLocation)
-//            minLocation = location
-//    }
-//////////////////////////////////////////
-//
+/////////////////////////////
+//    Part 1
+//    val totalSeeds = seeds.size.toLong()
+/////////////////////////////
+
+/////////////////////////////
 //     Part 2
     val pairs = seeds.chunked(2)
     val totalSeeds = pairs.sumOf { it[1] }
-    var currentSeed = 0
     for (pair in pairs) {
-        var toSkip: Long = 0
-        for (seed in pair[0]..<pair[0] + pair[1]) {
-            println("Checking seed $currentSeed of $totalSeeds: ${(currentSeed.toDouble() / totalSeeds.toDouble()) * 100}% done. Current Minimum: $minLocation. Still to skip: $toSkip")
+        for (seed in pair[0] until pair[0] + pair[1]) {
+/////////////////////////////
+
+/////////////////////////////
+//    Part 1
+//            for (seed in seeds) {
+/////////////////////////////
+
+            if (currentSeed % (totalSeeds / 1000).toInt() == 0)
+                println("${currentSeed.toDouble() / totalSeeds.toDouble() * 100}% done")
+
             currentSeed++
+            val soil = mapValue(seed, input.seedSoilMap)
+            val fertilizer = mapValue(soil, input.soilFertilizerMap)
+            val water = mapValue(fertilizer, input.fertilizerWaterMap)
+            val light = mapValue(water, input.waterLightMap)
+            val temperature = mapValue(light, input.lightTemperatureMap)
+            val humidity = mapValue(temperature, input.temperatureHumidityMap)
+            val location = mapValue(humidity, input.humidityLocationMap)
 
-            if (toSkip > 0) {
-                toSkip--
-            } else {
-                val soil = mapValue(seed, input.seedSoilMap)
-                val fertilizer = mapValue(soil.first, input.soilFertilizerMap)
-                val water = mapValue(fertilizer.first, input.fertilizerWaterMap)
-                val light = mapValue(water.first, input.waterLightMap)
-                val temperature = mapValue(light.first, input.lightTemperatureMap)
-                val humidity = mapValue(temperature.first, input.temperatureHumidityMap)
-                val location = mapValue(humidity.first, input.humidityLocationMap)
-
-                toSkip = listOf(
-                    soil.second,
-                    fertilizer.second,
-                    water.second,
-                    light.second,
-                    temperature.second,
-                    humidity.second,
-                    location.second
-                ).min()
-
-                if (location.first < minLocation)
-                    minLocation = location.first
-            }
+            if (location < minLocation)
+                minLocation = location
+            currentSeed++
         }
-//////////////////////////////////////////
+
+/////////////////////////////
+// Part 2
     }
+/////////////////////////////
+
     return minLocation
 }
 
@@ -90,12 +78,9 @@ private fun parseMap(input: List<String>, title: String): List<SeedMapEntry> {
     return entries
 }
 
-private fun mapValue(source: Long, seedMapEntries: List<SeedMapEntry>): Pair<Long, Long> {
+private fun mapValue(source: Long, seedMapEntries: List<SeedMapEntry>): Long {
     for (entry in seedMapEntries)
-        if (source in entry.sourceStart..entry.sourceStart + entry.range) {
-            val target = source - entry.sourceStart + entry.destinationStart
-            val restInRange = entry.sourceStart + entry.range - source
-            return Pair(target, restInRange)
-        }
-    return Pair(source, 0)
+        if (source in entry.sourceStart until entry.sourceStart + entry.range)
+            return source - entry.sourceStart + entry.destinationStart
+    return source
 }
