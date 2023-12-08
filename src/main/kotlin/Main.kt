@@ -1,3 +1,3 @@
 fun main() {
-    println(seventh())
+    println(eighth())
 }
