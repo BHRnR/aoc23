@@ -2,22 +2,17 @@ import java.io.File
 
 fun ninth(): Int =
     File("src/main/resources/input9").readLines()
-        .map {
-            it.split(" ").map { entry -> entry.toInt() }
-        }.sumOf { getNextNumber(it) }
+        .map { it.split(" ").map { entry -> entry.toInt() } }
+        .map { getSequences(it) }
+//        .sumOf { getNextNumber(it) } // Part 1
+        .sumOf { getPreviousNumber(it) } // Part 2
 
+private fun getSequences(list: List<Int>): List<List<Int>> =
+    generateSequence(list) { current -> if (current.all { it == 0 }) null else getNextSequence(current) }.toList()
 
-private fun getNextNumber(list: List<Int>): Int {
-    val allSequences = mutableListOf(list)
-    var currentSequence = list
-    while (!currentSequence.all { it == 0 }) {
-        val nextSequence = currentSequence.zipWithNext { a, b -> b - a }
-        allSequences.add(nextSequence)
-        currentSequence = nextSequence
-    }
+private fun getNextSequence(list: List<Int>): List<Int> = list.zipWithNext { a, b -> b - a }
 
-    return allSequences.sumOf { it.last() }
-}
+fun getNextNumber(sequences: List<List<Int>>): Int = sequences.sumOf { it.last() }
 
-private fun getNextSequence(list: List<Int>): List<Int> =
-    list.zipWithNext { a, b -> b - a }
+private fun getPreviousNumber(sequences: List<List<Int>>): Int =
+    sequences.foldRight(0) { currentSequence, accumulator -> currentSequence.first() - accumulator }
