@@ -16,7 +16,7 @@ fun eighth(): Int {
     return currentStep
 }
 
-private fun parseInput(): Pair<String,Map<String,List<String>>> {
+private fun parseInput(): Pair<String, Map<String, List<String>>> {
     val input = File("src/main/resources/input8").readLines()
     val directions = input[0]
     input.removeFirst()
@@ -24,11 +24,11 @@ private fun parseInput(): Pair<String,Map<String,List<String>>> {
 
     val nodesMap = input.associate {
         val splitString = it.split(" = ")
-        val positon = splitString[0]
+        val position = splitString[0]
         val nodes = splitString[1].replace("(", "").replace(")", "").split(", ")
-        positon to listOf(nodes[0], nodes[1])
+        position to listOf(nodes[0], nodes[1])
     }.toMap()
         .onEach { println(it) }
-    return Pair(directions,nodesMap)
+    return Pair(directions, nodesMap)
 }
 
