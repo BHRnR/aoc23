@@ -3,7 +3,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-private const val TIMES_EXPANDED = 2
+private const val TIMES_EXPANDED = 2 // Set to 1 for Part 1
 
 fun eleventh(): Long {
     val image = File("src/main/resources/input11").readLines().map { it.toList() }
