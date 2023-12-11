@@ -2,7 +2,7 @@ import java.io.File
 import java.lang.IllegalArgumentException
 import kotlin.math.abs
 
-val input = getData(File("src/main/resources/input10").readLines())
+private val input = getData(File("src/main/resources/input10").readLines())
 
 class Step(
     val position: Pair<Int, Int>,
