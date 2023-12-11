@@ -59,14 +59,10 @@ private fun getDistance(
     linesToExpand: List<Int>,
     colsToExpand: List<Int>
 ): Int {
-    var linesExpanded = 0
-    var colsExpanded = 0
-
-    for (line in min(first.first, second.first)..max(first.first, second.first))
-        if (line in linesToExpand) linesExpanded++
-
-    for (col in min(first.second, second.second)..max(first.second, second.second))
-        if (col in colsToExpand) colsExpanded++
+    val linesExpanded = (min(first.first, second.first)..max(first.first, second.first))
+        .count { it in linesToExpand }
+    val colsExpanded = (min(first.second, second.second)..max(first.second, second.second))
+        .count { it in colsToExpand }
 
     return abs(second.first - first.first) +
             abs(second.second - first.second) +

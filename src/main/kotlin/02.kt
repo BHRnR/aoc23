@@ -17,9 +17,9 @@ private fun parseGame(entry: String): Game {
     val splitInput = entry.split(": ")
     val id = splitInput[0].replace("Game ", "").toInt()
     val draws = splitInput[1].split("; ").map { draws -> parseDraw(draws) }
-    val maxRed = draws.map { draw -> draw.red }.maxOrNull() ?: 0
-    val maxGreen = draws.map { draw -> draw.green }.maxOrNull() ?: 0
-    val maxBlue = draws.map { draw -> draw.blue }.maxOrNull() ?: 0
+    val maxRed = draws.maxOfOrNull { draw -> draw.red } ?: 0
+    val maxGreen = draws.maxOfOrNull { draw -> draw.green } ?: 0
+    val maxBlue = draws.maxOfOrNull { draw -> draw.blue } ?: 0
     return Game(id, maxRed, maxGreen, maxBlue)
 
 }
