@@ -1,43 +1,59 @@
 import java.io.File
 import java.util.*
 
+const val TOTAL_ROTATIONS = 1000000000
 
+// Note: Directions are shifted clockwise (North is to the right, East down, ...)
 fun fourteenth(): Int {
-    val data = File("src/main/resources/input14").readLines()
-    return rotateDataLeft(data)
-        .map { moveToLeft(it) }
-        .sumOf { getWeightFromRight(it) }
+    val initial = rotateDataRight(File("src/main/resources/input14").readLines())
+
+    val pastResults = mutableMapOf<Int, List<String>>()
+
+    var current = initial
+    for (i in 1..TOTAL_ROTATIONS) {
+        current = rotateAndShiftCompletely(current)
+        if (current in pastResults.values) {
+            val lastOccurrence = pastResults.filterValues { it == current }.keys.first()
+            val loopLength = i - lastOccurrence
+            val modulus = TOTAL_ROTATIONS % loopLength
+            current =
+                if (TOTAL_ROTATIONS % loopLength in lastOccurrence..i) pastResults[modulus]!!
+                else pastResults[modulus + loopLength]!!
+            break
+        } else {
+            pastResults[i] = current
+        }
+    }
+
+//    return getWeight(data.map { moveToRight(it) }) // Part 1
+    return getWeight(current) // Part 2
 }
 
-private fun moveToLeft(original: String): String {
+private fun rotateAndShiftCompletely(data: List<String>): List<String> =
+    (1..4).fold(data) { acc, _ -> rotateDataRight(acc.map { moveToRight(it) }) }
+
+private fun moveToRight(original: String): String {
     val result = original.toMutableList()
-    for (i in result.indices)
+    for (i in result.indices.reversed())
         if (result[i] == 'O')
-            Collections.swap(result, i, findNextFixed(result, i) + 1)
+            Collections.swap(result, i, findNextFixed(result, i) - 1)
 
     return result.toCharArray().concatToString()
 }
 
 private fun findNextFixed(line: List<Char>, position: Int): Int =
-    (position - 1 downTo 0).firstOrNull { line[it] != '.' } ?: -1
+    (position + 1..<line.size).firstOrNull { line[it] != '.' } ?: line.size
 
-private fun getWeightFromRight(line: String): Int =
-    line.reversed()
-        .mapIndexed { index, char -> if (char == 'O') index + 1 else 0 }
-        .sum()
+private fun getWeight(data: List<String>): Int =
+    data.sumOf { getWeightFromLeft(it) }
 
-private fun rotateDataRight(map: List<String>): List<String> {
-    val result = MutableList(map[0].length) { "" }
-    for (i in map.size - 1 downTo 0)
-        for (j in map[0].indices)
-            result[j] = result[j] + map[i][j]
-    return result
-}
+private fun getWeightFromLeft(line: String): Int =
+    line.mapIndexed { index, char -> if (char == 'O') index + 1 else 0 }.sum()
 
-private fun rotateDataLeft(map: List<String>): List<String> {
-    val result = MutableList(map[0].length) { "" }
-    for (i in map.indices)
-        for (j in map[0].length - 1 downTo 0)
-            result[j] = result[j] + map[i][j]
+private fun rotateDataRight(data: List<String>): List<String> {
+    val result = MutableList(data[0].length) { "" }
+    for (i in data.size - 1 downTo 0)
+        for (j in data[0].indices)
+            result[j] = result[j] + data[i][j]
     return result
 }
