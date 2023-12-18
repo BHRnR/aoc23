@@ -1,3 +1,4 @@
+import utils.Direction
 import java.io.File
 import java.lang.IllegalArgumentException
 import kotlin.math.abs
@@ -21,7 +22,6 @@ val directionsMap = mapOf(
     'F' to Pair(Direction.South, Direction.East)
 )
 
-enum class Direction { North, East, South, West, Undefined }
 
 fun tenth(): Int {
     var current = Step(getStartPosition(input), null, null)
@@ -113,7 +113,6 @@ private fun getByDirection(position: Pair<Int, Int>, direction: Direction): Char
         Direction.East -> getEast(position)
         Direction.South -> getSouth(position)
         Direction.West -> getWest(position)
-        Direction.Undefined -> throw IllegalArgumentException()
     }
 
 private fun getOpposite(direction: Direction): Direction {
@@ -122,7 +121,6 @@ private fun getOpposite(direction: Direction): Direction {
         Direction.East -> Direction.West
         Direction.South -> Direction.North
         Direction.West -> Direction.East
-        Direction.Undefined -> throw IllegalArgumentException()
     }
 }
 
@@ -132,7 +130,6 @@ private fun getNextPosition(oldPosition: Pair<Int, Int>, goingTo: Direction): Pa
         Direction.East -> Pair(oldPosition.first, oldPosition.second + 1)
         Direction.South -> Pair(oldPosition.first + 1, oldPosition.second)
         Direction.West -> Pair(oldPosition.first, oldPosition.second - 1)
-        Direction.Undefined -> throw IllegalArgumentException()
     }
 
 private fun getNewComingFrom(comingFrom: Direction, symbol: Char): Direction {
