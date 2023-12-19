@@ -17,7 +17,7 @@ fun eighteenth(): Long {
 }
 
 private fun gausTrapez(vertizes: List<Pair<Long, Long>>): Long =
-    (1..<vertizes.size - 1).sumOf { vertizes[it].first * (vertizes[it - 1].second - vertizes[it + 1].second) } / 2L
+    (1 until vertizes.size - 1).sumOf { vertizes[it].first * (vertizes[it - 1].second - vertizes[it + 1].second) } / 2L
 
 private fun getDistanceToNextVertex(instruction: Pair<Direction, Long>): Pair<Long, Long> =
     when (instruction.first) {

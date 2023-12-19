@@ -65,7 +65,9 @@ private fun checkCriterion(part: Part, criterion: Criterion): Boolean {
 private fun parseInput(): Pair<Map<String, List<Criterion>>, List<Part>> {
     val input = File("src/main/resources/input19").readLines()
     val emptyLine = input.indexOf("")
-    return Pair(input.take(emptyLine).map { parseInstruction(it) }.toMap(), input.subList(emptyLine + 1, input.size).map { parsePart(it) })
+    return Pair(
+        input.take(emptyLine).map { parseInstruction(it) }.toMap(),
+        input.subList(emptyLine + 1, input.size).map { parsePart(it) })
 }
 
 private fun parseInstruction(input: String): Pair<String, List<Criterion>> {

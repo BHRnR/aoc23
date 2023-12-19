@@ -11,7 +11,7 @@ fun eleventh(): Long {
 
     var sum: Long = 0
     for (current in positions.indices)
-        for (rest in current + 1..<positions.size)
+        for (rest in current + 1 until positions.size)
             sum += getDistance(
                 positions[current],
                 positions[rest],

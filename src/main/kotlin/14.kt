@@ -42,7 +42,7 @@ private fun moveToRight(original: String): String {
 }
 
 private fun findNextFixed(line: List<Char>, position: Int): Int =
-    (position + 1..<line.size).firstOrNull { line[it] != '.' } ?: line.size
+    (position + 1 until line.size).firstOrNull { line[it] != '.' } ?: line.size
 
 private fun getWeight(data: List<String>): Int =
     data.sumOf { getWeightFromLeft(it) }
